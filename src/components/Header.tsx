@@ -6,7 +6,6 @@ import { Search, Notification } from "react-iconly";
 const Header = () => {
   return (
     <div className="flex items-center justify-between py-4 px-8 bg-white backdrop-blur-sm sticky top-0 z-10 border-b border-gray-200">
-      {/* Search Bar - Left Side */}
       <div className="relative flex-1 max-w-xl">
         <input
           type="text"
@@ -18,7 +17,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* User Profile - Right Side */}
       <div className="flex items-center gap-4">
           <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-yellow-100 p-1">

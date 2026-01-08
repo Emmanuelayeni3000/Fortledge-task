@@ -7,7 +7,6 @@ import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 
 const DashboardContent = () => {
-  // Revenue Data (Mock) - Grouped for "Last 6 days" and "Last Week"
   const revenueData = [
     { day: "01", value: 30, type: "Last 6 days" },
     { day: "01", value: 15, type: "Last Week" },
@@ -58,7 +57,6 @@ const DashboardContent = () => {
     }
   };
 
-  // Order Time Data with additional details
   const orderTimeDetails: Record<string, { time: string; orders: string }> = {
     "Afternoon": { time: "1pm - 4pm", orders: "1.890" },
     "Evening": { time: "5pm - 9pm", orders: "1.512" },
@@ -68,7 +66,6 @@ const DashboardContent = () => {
   const [activeSection, setActiveSection] = useState("Afternoon");
   const [isHovering, setIsHovering] = useState(false);
 
-  // Data ordered so Afternoon (first) appears on the right
   const orderTimeData = [
     { type: "Afternoon", value: 40 },
     { type: "Evening", value: 32 },
@@ -81,11 +78,11 @@ const DashboardContent = () => {
     colorField: "type",
     innerRadius: 0.65,
     radius: 0.85,
-    startAngle: Math.PI * 0.5, // Start from right side
+    startAngle: Math.PI * 0.5,
     endAngle: Math.PI * 2.5,
     scale: {
       color: {
-        range: ["#5a6acf", "#c7ceff", "#8593ed"], // Afternoon (darkest), Evening, Morning
+        range: ["#5a6acf", "#c7ceff", "#8593ed"],
       },
     },
     legend: false,
@@ -107,7 +104,6 @@ const DashboardContent = () => {
     },
   };
 
-  // Order Line Chart Data - matching reference pattern
   const orderLineData = [
     { day: "01", value: 1600, type: "Last 6 days" },
     { day: "02", value: 1400, type: "Last 6 days" },
@@ -133,12 +129,12 @@ const DashboardContent = () => {
         range: ["#5A6ACF", "#CBCBCB"],
       },
     },
-    smooth: false, // Angular/straight lines
+    smooth: false,
     axis: {
       y: { labelFormatter: () => "", grid: null, line: null, tick: null },
       x: { label: { style: { fill: '#9CA3AF', fontSize: 10 } }, line: null, tick: null }
     },
-    legend: false, // We'll use custom legend
+    legend: false,
     point: false,
     lineStyle: {
         lineWidth: 2.5,
@@ -147,12 +143,9 @@ const DashboardContent = () => {
 
   return (
     <div className="bg-white overflow-hidden">
-      {/* Dashboard Header */}
       <h1 className="text-xl font-semibold text-black px-8 pt-8 pb-4">Dashboard</h1>
       
-      {/* Top Row: Revenue & Order Time */}
       <div className="flex flex-col lg:flex-row lg:items-stretch min-h-[400px]">
-        {/* Revenue Section */}
         <div className="flex-[2] p-8">
             <div className="flex justify-between items-start mb-6">
                 <div>
@@ -190,10 +183,8 @@ const DashboardContent = () => {
             </div>
         </div>
 
-        {/* Vertical Separator */}
          <div className="hidden lg:block w-px bg-gray-200 self-stretch" />
 
-        {/* Order Time Section */}
         <div className="flex-[1] py-8 px-[1.0625rem] flex flex-col">
             <div className="flex justify-between items-start mb-4">
                 <div>
@@ -208,7 +199,6 @@ const DashboardContent = () => {
             <div className="flex-1 flex items-center justify-center relative">
                <div className="w-48 h-48 relative">
                     <Pie {...orderTimeConfig} />
-                    {/* Invisible trigger zone over Afternoon section */}
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <div className="absolute top-1/4 right-0 w-20 h-28 cursor-pointer" />
@@ -247,36 +237,26 @@ const DashboardContent = () => {
         </div>
       </div>
 
-      {/* Horizontal Separator */}
       <Separator orientation="horizontal" className="w-full h-px bg-gray-100" />
 
-      {/* Bottom Row */}
       <div className="flex flex-col lg:flex-row lg:items-stretch min-h-[350px]">
-         {/* Your Rating - SVG Circles */}
          <div className="flex-[1] p-8">
            <h2 className="text-lg font-normal text-black mb-1">Your Rating</h2>
            <p className="text-xs text-gray-400 mb-6">Lorem ipsum dolor sit amet, consectetur</p>
            
            <div className="w-full h-64 relative flex items-center justify-center">
-              {/* Custom overlapping circles with partial ring strokes on right side */}
               <svg viewBox="0 0 340 260" className="w-full h-full">
-                {/* Packaging Circle (Green/Teal) - Medium, bottom left */}
                 <circle cx="80" cy="183" r="52" fill="#2FBFDE" fillOpacity="0.9" />
-                {/* Ring on right side - shorter stroke */}
                 <circle cx="80" cy="183" r="58" fill="none" stroke="#2FBFDE" strokeWidth="3" strokeDasharray="220 145" transform="rotate(270 80 183)" strokeLinecap="round" />
                 <text x="80" y="178" textAnchor="middle" fill="white" fontSize="18" fontWeight="bold">92%</text>
                 <text x="80" y="198" textAnchor="middle" fill="white" fontSize="10">Packaging</text>
                 
-                {/* Food Taste Circle (Orange/Yellow) - Biggest */}
                 <circle cx="210" cy="120" r="68" fill="#F99C30" fillOpacity="0.9" />
-                {/* Ring on right side - shorter stroke */}
                 <circle cx="210" cy="120" r="74" fill="none" stroke="#F99C30" strokeWidth="3" strokeDasharray="280 185" transform="rotate(270 210 120)" strokeLinecap="round" />
                 <text x="210" y="113" textAnchor="middle" fill="white" fontSize="24" fontWeight="bold">85%</text>
                 <text x="210" y="138" textAnchor="middle" fill="white" fontSize="12">Food Taste</text>
                 
-                {/* Hygiene Circle (Blue/Purple) - Smallest, on top of Food Taste */}
                 <circle cx="118" cy="75" r="42" fill="#6463D6" fillOpacity="0.9" />
-                {/* Ring on right side - shorter stroke */}
                 <circle cx="118" cy="75" r="48" fill="none" stroke="#6463D6" strokeWidth="3" strokeDasharray="180 120" transform="rotate(270 118 75)" strokeLinecap="round" />
                 <text x="118" y="68" textAnchor="middle" fill="white" fontSize="16" fontWeight="bold">85%</text>
                 <text x="118" y="85" textAnchor="middle" fill="white" fontSize="9">Hygiene</text>
@@ -286,7 +266,6 @@ const DashboardContent = () => {
 
          <div className="hidden lg:block w-px bg-gray-200 self-stretch" />
 
-         {/* Most Ordered Food */}
          <div className="flex-[1] p-8">
            <h2 className="text-lg font-normal text-black mb-1">Most Ordered Food</h2>
            <p className="text-xs text-gray-400 mb-6">Adipiscing elit, sed do eiusmod tempor</p>
@@ -313,7 +292,6 @@ const DashboardContent = () => {
 
          <div className="hidden lg:block w-px bg-gray-200 self-stretch" />
 
-         {/* Order Stats with Line Chart */}
          <div className="flex-[1] p-8">
              <div className="flex justify-between items-start mb-4">
                 <div>
@@ -334,7 +312,6 @@ const DashboardContent = () => {
               <div className="h-32">
                  <Line {...orderLineConfig} />
               </div>
-              {/* Custom Legend */}
               <div className="flex items-center gap-6 mt-4">
                 <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-[#5A6ACF]"></span>

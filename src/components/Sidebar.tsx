@@ -2,14 +2,14 @@
 
 import React from "react";
 import {
-  Chart as ChartIcon, // Dashboard -> Chart icon
+  Chart as ChartIcon,
   Buy,
-  Category, // Manage Menu (Category or similar)
-  Chat, // Customer Review
+  Category,
+  Chat,
   Setting,
-  Wallet, // Payment
-  User, // Accounts
-  InfoSquare, // Help
+  Wallet,
+  User,
+  InfoSquare,
 } from "react-iconly";
 
 const Sidebar = () => {
@@ -86,7 +86,6 @@ const Sidebar = () => {
       </div>
       
        <div className="bg-blue-50 p-4 rounded-xl mt-4 mx-2 text-center hidden">
-          {/* Copyright or extra info if needed */}
           <p className="text-xs text-blue-400">© 2021 GoodFood</p>
        </div>
     </div>
