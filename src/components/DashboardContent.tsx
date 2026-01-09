@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Column, Pie, Line } from "@ant-design/charts";
 import { Separator } from "@/components/ui/separator";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 
 const DashboardContent = () => {
   const revenueData = [
@@ -65,6 +64,27 @@ const DashboardContent = () => {
 
   const [activeSection, setActiveSection] = useState("Afternoon");
   const [isHovering, setIsHovering] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+
+  // Close tooltip when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
+        setShowTooltip(false);
+      }
+    };
+
+    if (showTooltip) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [showTooltip]);
 
   const orderTimeData = [
     { type: "Afternoon", value: 40 },
@@ -143,10 +163,10 @@ const DashboardContent = () => {
 
   return (
     <div className="bg-white overflow-hidden">
-      <h1 className="text-xl font-semibold text-black px-8 pt-8 pb-4">Dashboard</h1>
+      <h1 className="text-xl font-semibold text-black px-4 md:px-8 pt-6 md:pt-8 pb-4">Dashboard</h1>
       
-      <div className="flex flex-col lg:flex-row lg:items-stretch min-h-[400px]">
-        <div className="flex-[2] p-8">
+      <div className="flex flex-col lg:flex-row lg:items-stretch min-h-fit lg:min-h-[400px]">
+        <div className="flex-[2] p-4 md:p-8">
             <div className="flex justify-between items-start mb-6">
                 <div>
                   <h2 className="text-lg font-normal text-black mb-1">Revenue</h2>
@@ -184,8 +204,9 @@ const DashboardContent = () => {
         </div>
 
          <div className="hidden lg:block w-px bg-gray-200 self-stretch" />
+         <Separator orientation="horizontal" className="lg:hidden w-full h-px bg-gray-200" />
 
-        <div className="flex-[1] py-8 px-[1.0625rem] flex flex-col">
+        <div className="flex-[1] py-6 md:py-8 px-4 md:px-[1.0625rem] flex flex-col">
             <div className="flex justify-between items-start mb-4">
                 <div>
                   <h2 className="text-lg font-normal text-black mb-1">Order Time</h2>
@@ -197,23 +218,46 @@ const DashboardContent = () => {
             </div>
             
             <div className="flex-1 flex items-center justify-center relative">
-               <div className="w-48 h-48 relative">
+               <div className="w-48 h-48 relative" ref={tooltipRef}>
                     <Pie {...orderTimeConfig} />
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <div className="absolute top-1/4 right-0 w-20 h-28 cursor-pointer" />
-                      </TooltipTrigger>
-                      <TooltipContent 
-                        side="top" 
-                        align="start"
-                        sideOffset={-20}
-                        className="bg-[#363B64] text-white px-5 py-4 rounded-xl shadow-lg border-0"
+                    <button 
+                      type="button"
+                      className="absolute top-1/4 right-0 w-20 h-28 cursor-pointer bg-transparent border-0 outline-none"
+                      style={{ touchAction: 'manipulation' }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowTooltip(prev => !prev);
+                      }}
+                      onMouseEnter={() => {
+                        if (window.matchMedia('(hover: hover)').matches) {
+                          setShowTooltip(true);
+                        }
+                      }}
+                      onMouseLeave={() => {
+                        if (window.matchMedia('(hover: hover)').matches) {
+                          setShowTooltip(false);
+                        }
+                      }}
+                      aria-label="Show order time details"
+                    />
+                    {showTooltip && (
+                      <div 
+                        className="absolute -top-2 right-0 translate-x-1/2 bg-[#363B64] text-white px-5 py-4 rounded-xl shadow-lg z-50 border-0"
+                        style={{ minWidth: '140px' }}
                       >
                         <p className="text-base font-normal">Afternoon</p>
                         <p className="text-sm text-slate-400">1pm - 4pm</p>
                         <p className="text-xl font-normal mt-2">1.890 orders</p>
-                      </TooltipContent>
-                    </Tooltip>
+                        <div 
+                          className="absolute bottom-0 left-4 w-0 h-0 translate-y-full"
+                          style={{
+                            borderLeft: '8px solid transparent',
+                            borderRight: '8px solid transparent',
+                            borderTop: '10px solid #363B64',
+                          }}
+                        />
+                      </div>
+                    )}
                </div>
             </div>
 
@@ -237,10 +281,10 @@ const DashboardContent = () => {
         </div>
       </div>
 
-      <Separator orientation="horizontal" className="w-full h-px bg-gray-100" />
+      <Separator orientation="horizontal" className="w-full h-px bg-gray-200" />
 
-      <div className="flex flex-col lg:flex-row lg:items-stretch min-h-[350px]">
-         <div className="flex-[1] p-8">
+      <div className="flex flex-col md:flex-row md:flex-wrap lg:flex-nowrap lg:items-stretch min-h-fit lg:min-h-[350px]">
+         <div className="flex-[1] p-4 md:p-8 min-w-[280px] md:min-w-[50%] lg:min-w-0">
            <h2 className="text-lg font-normal text-black mb-1">Your Rating</h2>
            <p className="text-xs text-gray-400 mb-6">Lorem ipsum dolor sit amet, consectetur</p>
            
@@ -265,8 +309,9 @@ const DashboardContent = () => {
          </div>
 
          <div className="hidden lg:block w-px bg-gray-200 self-stretch" />
+         <Separator orientation="horizontal" className="lg:hidden w-full h-px bg-gray-200" />
 
-         <div className="flex-[1] p-8">
+         <div className="flex-[1] p-4 md:p-8 min-w-[280px] md:min-w-[50%] lg:min-w-0">
            <h2 className="text-lg font-normal text-black mb-1">Most Ordered Food</h2>
            <p className="text-xs text-gray-400 mb-6">Adipiscing elit, sed do eiusmod tempor</p>
            
@@ -291,8 +336,9 @@ const DashboardContent = () => {
          </div>
 
          <div className="hidden lg:block w-px bg-gray-200 self-stretch" />
+         <Separator orientation="horizontal" className="md:hidden w-full h-px bg-gray-200" />
 
-         <div className="flex-[1] p-8">
+         <div className="flex-[1] p-4 md:p-8 min-w-[280px] md:w-full lg:w-auto lg:min-w-0">
              <div className="flex justify-between items-start mb-4">
                 <div>
                   <h2 className="text-lg font-normal text-black mb-1">Order</h2>
