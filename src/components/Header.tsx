@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Search, Notification } from "react-iconly";
+import { Search, Notification, ChevronDown } from "react-iconly";
 
 const Header = () => {
   return (
@@ -22,8 +22,9 @@ const Header = () => {
               <div className="w-10 h-10 rounded-full bg-yellow-100 p-1">
                   <img src="/images/hamburger-avatar-icon.png" alt="User" onError={(e) => e.currentTarget.src = 'https://ui-avatars.com/api/?name=Delicious+Burger&background=FF8A00&color=fff'} className="w-full h-full rounded-full object-cover" />
               </div>
-              <div className="hidden md:block">
+              <div className="hidden md:flex items-center gap-1">
                   <p className="text-sm font-semibold text-slate-800">Delicious Burger</p>
+                  <ChevronDown set="light" size="small" primaryColor="#64748b" />
               </div>
           </div>
 
